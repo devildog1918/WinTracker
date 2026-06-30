@@ -1,22 +1,20 @@
-Mikey Wins Tracker PWA - JSON File Version
+Mikey Wins Tracker PWA - Custom Movement + Blue/Gray Theme
 
-Important change:
-- Progress is no longer intended to live only in browser storage.
-- The app uses a JSON file that can be saved to the tablet and loaded again.
+Changes:
+- Blue/gray color scheme.
+- Movement Ideas can be edited from Save / Load.
+- Movement format:
+  Name | Instructions
+- Progress, custom wins, and custom movement ideas are stored in the exported JSON file.
 
-How Mikey uses it:
-1. Open the app.
-2. Load his existing JSON file from the Save / Load tab.
+Use:
+1. Open app.
+2. Load existing JSON if available.
 3. Add wins.
-4. Tap Save JSON File when finished.
-5. Keep the newest JSON file as the backup/source of truth.
+4. Edit win list or movement list if needed.
+5. Tap Save JSON File to keep the latest version.
 
-Recommended:
-- Create a folder on the tablet called Mikey Wins Tracker.
-- Save the JSON file there each time.
-- Periodically delete older copies if needed.
-
-Files to upload to the Mitsubishi PWA site:
+Upload these files:
 - index.html
 - styles.css
 - app.js

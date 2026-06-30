@@ -15,46 +15,23 @@ const defaultActivities = [
   "Got ready for bed"
 ];
 
-const movementIdeas = [
-  {
-    name: "Foot Up, Foot Down",
-    details: "Sit or lie comfortably. Pull your toes up toward your face, then point them away like gently pressing a gas pedal. Repeat 10–20 times."
-  },
-  {
-    name: "Seated March",
-    details: "Sit on the bed or in a sturdy chair. Lift one knee a few inches, lower it, then lift the other. Go slowly for 30 seconds to 2 minutes."
-  },
-  {
-    name: "Arm Raises",
-    details: "Raise both arms in front of you or overhead as far as comfortable. Lower slowly. Try 5–10 times."
-  },
-  {
-    name: "Seated Punches",
-    details: "Sit tall if you can. Slowly punch straight ahead, alternating arms. Try 30 seconds."
-  },
-  {
-    name: "Shoulder Rolls",
-    details: "Roll your shoulders forward 10 times, then backward 10 times. Keep it slow and comfortable."
-  },
-  {
-    name: "Leg Extensions",
-    details: "While sitting, straighten one leg as much as comfortable, hold for 2 seconds, then lower it. Switch legs. Try 5 times each."
-  },
-  {
-    name: "Deep Breathing",
-    details: "Breathe in through your nose for 4 seconds. Breathe out through your mouth for 6 seconds. Repeat 5 times."
-  },
-  {
-    name: "Reach and Stretch",
-    details: "Reach both hands toward the ceiling or out to the sides. Hold for 10 seconds. Stretch gently, not painfully."
-  }
+const defaultMovements = [
+  { name: "Foot Up, Foot Down", details: "Sit or lie comfortably. Pull your toes up toward your face, then point them away like gently pressing a gas pedal. Repeat 10-20 times." },
+  { name: "Seated March", details: "Sit on the bed or in a sturdy chair. Lift one knee a few inches, lower it, then lift the other. Go slowly for 30 seconds to 2 minutes." },
+  { name: "Arm Raises", details: "Raise both arms in front of you or overhead as far as comfortable. Lower slowly. Try 5-10 times." },
+  { name: "Seated Punches", details: "Sit tall if you can. Slowly punch straight ahead, alternating arms. Try 30 seconds." },
+  { name: "Shoulder Rolls", details: "Roll your shoulders forward 10 times, then backward 10 times. Keep it slow and comfortable." },
+  { name: "Leg Extensions", details: "While sitting, straighten one leg as much as comfortable, hold for 2 seconds, then lower it. Switch legs. Try 5 times each." },
+  { name: "Deep Breathing", details: "Breathe in through your nose for 4 seconds. Breathe out through your mouth for 6 seconds. Repeat 5 times." },
+  { name: "Reach and Stretch", details: "Reach both hands toward the ceiling or out to the sides. Hold for 10 seconds. Stretch gently, not painfully." }
 ];
 
 const milestones = [25, 50, 100, 250, 500, 1000];
 
 let trackerData = {
-  version: 2,
+  version: 3,
   activities: defaultActivities,
+  movements: defaultMovements,
   entries: []
 };
 
@@ -62,11 +39,32 @@ function loadFromSession() {
   const saved = sessionStorage.getItem("trackerData");
   if (saved) {
     trackerData = JSON.parse(saved);
+    if (!trackerData.movements) trackerData.movements = defaultMovements;
+    if (!trackerData.activities) trackerData.activities = defaultActivities;
+    if (!trackerData.entries) trackerData.entries = [];
   }
 }
 
 function saveToSession() {
   sessionStorage.setItem("trackerData", JSON.stringify(trackerData));
+}
+
+function movementsToText(movements) {
+  return movements.map(m => `${m.name} | ${m.details}`).join("\n");
+}
+
+function textToMovements(text) {
+  return text.split("\n")
+    .map(line => line.trim())
+    .filter(Boolean)
+    .map(line => {
+      const parts = line.split("|");
+      return {
+        name: (parts[0] || "").trim(),
+        details: (parts.slice(1).join("|") || "No instructions added yet.").trim()
+      };
+    })
+    .filter(m => m.name);
 }
 
 function renderActivities() {
@@ -86,7 +84,7 @@ function renderActivities() {
 function renderMovement() {
   const list = document.getElementById("movementList");
   list.innerHTML = "";
-  movementIdeas.forEach(item => {
+  trackerData.movements.forEach(item => {
     const div = document.createElement("div");
     div.className = "move";
     div.innerHTML = `<h3>${item.name}</h3><p>${item.details}</p>`;
@@ -107,7 +105,6 @@ function renderHistory() {
   const list = document.getElementById("historyList");
   const entries = trackerData.entries.slice().reverse();
   list.innerHTML = entries.length ? "" : "<p>No saved progress loaded yet.</p>";
-
   entries.forEach(entry => {
     const div = document.createElement("div");
     div.className = "entry";
@@ -169,17 +166,18 @@ function loadJsonFile(event) {
   reader.onload = function(e) {
     try {
       const loaded = JSON.parse(e.target.result);
-      if (!loaded.entries || !Array.isArray(loaded.entries)) {
-        throw new Error("Invalid tracker file.");
-      }
+      if (!loaded.entries || !Array.isArray(loaded.entries)) throw new Error("Invalid tracker file.");
       trackerData = {
-        version: loaded.version || 2,
+        version: loaded.version || 3,
         activities: Array.isArray(loaded.activities) ? loaded.activities : defaultActivities,
+        movements: Array.isArray(loaded.movements) ? loaded.movements : defaultMovements,
         entries: loaded.entries
       };
       saveToSession();
       document.getElementById("customActivities").value = trackerData.activities.join("\n");
+      document.getElementById("customMovements").value = movementsToText(trackerData.movements);
       renderActivities();
+      renderMovement();
       renderHistory();
       updateTotals();
       alert("Progress file loaded.");
@@ -202,36 +200,53 @@ function setupTabs() {
 }
 
 function setupSettings() {
-  const box = document.getElementById("customActivities");
-  box.value = trackerData.activities.join("\n");
+  const activityBox = document.getElementById("customActivities");
+  const movementBox = document.getElementById("customMovements");
+  activityBox.value = trackerData.activities.join("\n");
+  movementBox.value = movementsToText(trackerData.movements);
 
-  document.getElementById("saveSettingsBtn").addEventListener("click", () => {
-    const items = box.value.split("\n").map(x => x.trim()).filter(Boolean);
+  document.getElementById("saveActivitiesBtn").addEventListener("click", () => {
+    const items = activityBox.value.split("\n").map(x => x.trim()).filter(Boolean);
     trackerData.activities = items;
     saveToSession();
     renderActivities();
-    alert("Activity list updated. Use Save JSON File to keep the change.");
+    alert("Win list updated. Use Save JSON File to keep the change.");
   });
 
-  document.getElementById("resetSettingsBtn").addEventListener("click", () => {
+  document.getElementById("resetActivitiesBtn").addEventListener("click", () => {
     trackerData.activities = defaultActivities;
-    box.value = defaultActivities.join("\n");
+    activityBox.value = defaultActivities.join("\n");
     saveToSession();
     renderActivities();
-    alert("Defaults restored. Use Save JSON File to keep the change.");
+    alert("Win defaults restored. Use Save JSON File to keep the change.");
+  });
+
+  document.getElementById("saveMovementsBtn").addEventListener("click", () => {
+    const items = textToMovements(movementBox.value);
+    trackerData.movements = items.length ? items : defaultMovements;
+    movementBox.value = movementsToText(trackerData.movements);
+    saveToSession();
+    renderMovement();
+    alert("Movement list updated. Use Save JSON File to keep the change.");
+  });
+
+  document.getElementById("resetMovementsBtn").addEventListener("click", () => {
+    trackerData.movements = defaultMovements;
+    movementBox.value = movementsToText(defaultMovements);
+    saveToSession();
+    renderMovement();
+    alert("Movement defaults restored. Use Save JSON File to keep the change.");
   });
 }
 
 function clearCurrentScreenData() {
   if (confirm("Clear current loaded data from this screen? This does not delete any JSON file already saved on the tablet.")) {
-    trackerData = {
-      version: 2,
-      activities: defaultActivities,
-      entries: []
-    };
+    trackerData = { version: 3, activities: defaultActivities, movements: defaultMovements, entries: [] };
     saveToSession();
     document.getElementById("customActivities").value = defaultActivities.join("\n");
+    document.getElementById("customMovements").value = movementsToText(defaultMovements);
     renderActivities();
+    renderMovement();
     renderHistory();
     updateTotals();
   }

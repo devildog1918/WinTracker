@@ -1,11 +1,13 @@
 :root {
-  --green: #2f6f4e;
-  --light: #f5f8f4;
+  --navy: #243447;
+  --blue: #3f5f7f;
+  --sky: #dce8f2;
+  --light: #f4f6f8;
   --card: #ffffff;
-  --text: #18251f;
-  --muted: #5f6f65;
-  --border: #d7e2d8;
-  --danger: #b23b3b;
+  --text: #1d2730;
+  --muted: #64717d;
+  --border: #d8e0e7;
+  --danger: #9f3a3a;
 }
 
 * { box-sizing: border-box; }
@@ -19,7 +21,7 @@ body {
 }
 
 header {
-  background: var(--green);
+  background: linear-gradient(135deg, var(--navy), var(--blue));
   color: white;
   padding: 24px 18px;
   text-align: center;
@@ -27,6 +29,7 @@ header {
 
 h1 { margin: 0; font-size: 34px; }
 h2 { margin-top: 0; font-size: 28px; }
+h3 { margin-top: 28px; font-size: 24px; }
 p { line-height: 1.4; }
 
 nav {
@@ -34,7 +37,7 @@ nav {
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
   padding: 8px;
-  background: #e5eee6;
+  background: var(--sky);
   position: sticky;
   top: 0;
   z-index: 2;
@@ -48,8 +51,8 @@ button {
   font-weight: bold;
 }
 
-.tab { background: #ffffff; color: var(--green); }
-.tab.active { background: var(--green); color: white; }
+.tab { background: #ffffff; color: var(--navy); }
+.tab.active { background: var(--navy); color: white; }
 
 main { max-width: 900px; margin: auto; padding: 14px; }
 
@@ -75,7 +78,7 @@ main { max-width: 900px; margin: auto; padding: 14px; }
   border-radius: 14px;
   padding: 16px;
   margin: 10px 0;
-  background: #fbfdfb;
+  background: #fbfcfd;
 }
 
 .activity input {
@@ -110,20 +113,18 @@ select, textarea {
   border-radius: 12px;
 }
 
-textarea {
-  min-height: 110px;
-}
+textarea { min-height: 140px; }
 
 .primary {
-  background: var(--green);
+  background: var(--navy);
   color: white;
   margin-top: 18px;
   width: 100%;
 }
 
 .secondary {
-  background: #dce8dd;
-  color: var(--green);
+  background: var(--sky);
+  color: var(--navy);
   margin: 8px 0;
   width: 100%;
 }
@@ -135,21 +136,19 @@ textarea {
   width: 100%;
 }
 
-.total {
-  text-align: center;
-}
+.total { text-align: center; }
 
 #totalWins {
   font-size: 64px;
   font-weight: bold;
-  color: var(--green);
+  color: var(--navy);
 }
 
 .move {
-  border-left: 8px solid var(--green);
+  border-left: 8px solid var(--blue);
   padding: 14px;
   margin: 14px 0;
-  background: #fbfdfb;
+  background: #fbfcfd;
   border-radius: 12px;
 }
 
@@ -159,6 +158,8 @@ textarea {
   border-bottom: 1px solid var(--border);
   padding: 12px 0;
 }
+
+#saveMsg { color: var(--navy); font-weight: bold; }
 
 @media (max-width: 650px) {
   nav { grid-template-columns: 1fr 1fr; }

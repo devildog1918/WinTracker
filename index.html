@@ -6,7 +6,7 @@
   <title>Mikey Wins Tracker</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css">
-  <meta name="theme-color" content="#2f6f4e">
+  <meta name="theme-color" content="#243447">
 </head>
 <body>
   <header>
@@ -40,7 +40,7 @@
         </label>
 
         <label class="field">
-          One thing I’m proud of
+          One thing I'm proud of
           <textarea id="proud" placeholder="Example: I got up and moved for a few minutes."></textarea>
         </label>
 
@@ -82,11 +82,17 @@
           <input id="loadFile" type="file" accept="application/json,.json">
         </label>
 
-        <h3>Customize Activities</h3>
-        <p class="hint">Edit this list if you want. Put one activity per line.</p>
+        <h3>Customize Wins</h3>
+        <p class="hint">Put one win/activity per line.</p>
         <textarea id="customActivities"></textarea>
-        <button id="saveSettingsBtn" class="primary">Update Activity List</button>
-        <button id="resetSettingsBtn" class="secondary">Reset Defaults</button>
+        <button id="saveActivitiesBtn" class="primary">Update Win List</button>
+        <button id="resetActivitiesBtn" class="secondary">Reset Win Defaults</button>
+
+        <h3>Customize Movement Ideas</h3>
+        <p class="hint">Use this format: Name | Instructions</p>
+        <textarea id="customMovements"></textarea>
+        <button id="saveMovementsBtn" class="primary">Update Movement List</button>
+        <button id="resetMovementsBtn" class="secondary">Reset Movement Defaults</button>
 
         <button id="clearBtn" class="danger">Clear Current Screen Data</button>
       </div>

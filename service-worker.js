@@ -1,4 +1,4 @@
-const CACHE_NAME = "wins-tracker-v2";
+const CACHE_NAME = "wins-tracker-v3";
 const FILES = [
   "index.html",
   "styles.css",
