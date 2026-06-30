@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mikey Wins Tracker</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+  <meta name="theme-color" content="#2f6f4e">
+</head>
+<body>
+  <header>
+    <h1>Wins Tracker</h1>
+    <p>Check off anything you accomplish. Every win counts.</p>
+  </header>
+
+  <nav>
+    <button class="tab active" data-tab="wins">Wins</button>
+    <button class="tab" data-tab="movement">Movement Ideas</button>
+    <button class="tab" data-tab="history">History</button>
+    <button class="tab" data-tab="data">Save / Load</button>
+  </nav>
+
+  <main>
+    <section id="wins" class="panel active">
+      <div class="card">
+        <h2>What did I get done?</h2>
+        <p class="hint">No pressure. Pick anything that fits.</p>
+        <div id="activityList"></div>
+
+        <label class="field">
+          Mood right now
+          <select id="mood">
+            <option value="">Choose one</option>
+            <option>Better than usual</option>
+            <option>Okay</option>
+            <option>Rough</option>
+            <option>Very rough</option>
+          </select>
+        </label>
+
+        <label class="field">
+          One thing I’m proud of
+          <textarea id="proud" placeholder="Example: I got up and moved for a few minutes."></textarea>
+        </label>
+
+        <button id="saveBtn" class="primary">Add These Wins</button>
+        <p id="saveMsg"></p>
+      </div>
+
+      <div class="card total">
+        <h2>Total Wins</h2>
+        <div id="totalWins">0</div>
+        <p id="nextMilestone"></p>
+      </div>
+    </section>
+
+    <section id="movement" class="panel">
+      <div class="card">
+        <h2>Movement Ideas</h2>
+        <p class="hint">Start small. Stop if you feel pain, dizziness, chest pain, or unusual shortness of breath.</p>
+        <div id="movementList"></div>
+      </div>
+    </section>
+
+    <section id="history" class="panel">
+      <div class="card">
+        <h2>Saved Progress</h2>
+        <div id="historyList"></div>
+      </div>
+    </section>
+
+    <section id="data" class="panel">
+      <div class="card">
+        <h2>Save / Load Progress File</h2>
+        <p class="hint">Use this tab to keep progress in a JSON file on the tablet.</p>
+
+        <button id="downloadBtn" class="primary">Save JSON File</button>
+
+        <label class="filebox">
+          Load JSON File
+          <input id="loadFile" type="file" accept="application/json,.json">
+        </label>
+
+        <h3>Customize Activities</h3>
+        <p class="hint">Edit this list if you want. Put one activity per line.</p>
+        <textarea id="customActivities"></textarea>
+        <button id="saveSettingsBtn" class="primary">Update Activity List</button>
+        <button id="resetSettingsBtn" class="secondary">Reset Defaults</button>
+
+        <button id="clearBtn" class="danger">Clear Current Screen Data</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
